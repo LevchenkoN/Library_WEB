@@ -1,0 +1,41 @@
+<th:block th:fragment="nav">
+    <nav class="nav navbar-expand bg-dark navbar-dark mb-3">
+        <div class="collapse navbar-collapse">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">WebSiteName</a>
+            </div>
+            <ul class="navbar navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="/author/list">Author</a></li>
+                <li class="nav-item"><a class="nav-link" href="/issueBooks/students">Issue books</a></li>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown">
+                        Book
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/book/listBooks">Books list</a></li>
+                        <a class="dropdown-item" href="/book/inUse">Books in use</a>
+                        <a class="dropdown-item" href="/book/inStock">Books in stock</a>
+                        <a class="dropdown-item" href="/book/notReturned">Books not returned</a>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown">
+                        Add
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/add/teacherAdd">Teacher</a></li>
+                        <a class="dropdown-item" href="/add/groupAdd">Group</a></li>
+                        <a class="dropdown-item" href="/add/author/add">Authors</a></li>
+                    </div>
+                </div>
+
+            </ul>
+            <ul class="nav navbar-nav mr-5  ">
+                <li class="nav-item"><a  class="nav-link" href="/logout"><span class="glyphicon glyphicon-user"></span> Logout</a></li>
+                <li class="nav-item"><a  class="nav-link" href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            </ul>
+        </div>
+    </nav>
+</th:block>

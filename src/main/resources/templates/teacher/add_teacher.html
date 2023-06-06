@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Teacher add</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+</head>
+<body>
+<div th:insert="~{fragment/nav::nav}"></div>
+
+<h2 class="text-center">Add teacher and department </h2>
+
+
+<div class="container w-50">
+    <form id="add-department" class="needs-validation">
+        <div class="form-row">
+            <h2 class="text-center">Department add</h2>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <button type="submit" class="btn btn-success">Add</button>
+                </div>
+                <input id="department-in" required type="text" name="departmentName" class="form-control"
+                       aria-label="Text input with segmented dropdown button">
+            </div>
+        </div>
+    </form>
+<br>
+<br>
+<br>
+
+    <div class="input-group mb-3">
+        <h2 class="text-center">Teacher add</h2>
+        <div class="dropdown-menu container-fluid">
+            <ol class="list-group list-group-numbered pl-2"
+                style="max-height: 200px; overflow-y: scroll">
+                <li class="ml-3" th:each="t : ${teachers}">
+                    <p href="author/" th:text="${t.getFirstName()}+' '+${t.getLastName()}
+                                +' ('+${t.getDepartment().getName()}+')'"  class="list-group-item"></p>
+                </li>
+
+            </ol>
+        </div>
+        <button id="group-list-btn" type="button"
+                class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split w-100"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="sr-only">Teacher list</span>
+            Teacher list
+        </button>
+
+    </div>
+    <form id="add-teacher" class="needs-validation">
+        <div class="form-row">
+
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" >First name: </label>
+                    </div>
+                </div>
+                <input id="firstName" required type="text" name="firstName" class="form-control"
+                       aria-label="Text input with segmented dropdown button">
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" >Last name: </label>
+                    </div>
+                </div>
+                <input id="lastName" required type="text" name="lastName" class="form-control"
+                       aria-label="Text input with segmented dropdown button">
+            </div>
+
+            <div class="input-group mb-3">
+
+                <div class="input-group-prepend">
+                    <label class="input-group-text" >Department : </label>
+                </div>
+                <select  class="custom-select" name="department" id="departments-list" required>
+                    <option th:each="d : ${departments}" th:value="@{{id}(id = ${d.getId()})}">
+                        <p th:text="${d.getName()}"
+                           class="list-group-item"></p>
+                    </option>
+                </select>
+            </div>
+            <div class="input-group mb-3 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-success">Add teacher</button>
+
+            </div>
+
+        </div>
+    </form>
+
+</div>
+<script>
+    function isEmpty(value) {
+        return typeof value == 'string' && !value.trim() || typeof value == 'undefined' || value === null;
+    }
+
+    $("#add-teacher").submit(function (e) {
+
+        e.preventDefault();
+
+        if (isEmpty($("#firstName").val())&&isEmpty($("#lastName"))) {
+            return;
+        }
+
+        var form = $(this);
+        $.ajax({
+            type: "POST",
+            url: "/add/teacherAdd",
+            data: form.serialize(),
+            success: function () {
+                window.location.href = "/add/teacherAdd";
+            }
+        });
+
+    });
+    $("#add-department").submit(function (e) {
+
+        e.preventDefault();
+
+        if (isEmpty($("#department-in").val())) {
+            return;
+        }
+
+        var form = $(this);
+        $.ajax({
+            type: "POST",
+            url: "/add/departmentAdd",
+            data: form.serialize(),
+            success: function () {
+                faculties_list();
+            }
+        });
+
+    });
+
+    function faculties_list () {
+
+        $.ajax({
+            type: "GET",
+            url: "/add/department",
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 6000,
+            success: function (data) {
+                if (data != "") {
+                    console.log(data);
+                    $("#departments-list").empty();
+                    $("#departments-list").append(data);
+                } else {
+                    $("#departments-list").empty();
+                }
+            },
+            error: function (e) {
+                console.log("ERROR : ", e);
+                $("#departments-list").empty();
+            }
+        });
+    }
+
+
+</script>
+
+</body>
+</html>

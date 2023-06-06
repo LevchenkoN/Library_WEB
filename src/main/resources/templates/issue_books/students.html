@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Issue books students</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+</head>
+<body>
+<div th:insert="~{fragment/nav::nav}"></div>
+
+<h2 class="text-center">Issue books students </h2>
+
+
+<div class="container w-50">
+
+    <form id="search-books" name="search">
+        <div class="form-row mb-3 mt-3 d-flex flex-row ">
+            <h4 class="text-center mr-2">Search books: </h4>
+        <input type="text" id="search-text" name="search"  placeholder="min 3 symbol">
+            <button type="submit" class="btn btn-info" >Search</button>
+        </div>
+
+    </form>
+    <form id="issue-book" class="needs-validation">
+        <div class="form-row">
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" >Book: </label>
+                </div>
+                <select class="custom-select" name="book" id="books-list" required>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+
+            <div class="input-group mb-3">
+
+                <div class="input-group mb-3">
+                    <h5 class="text-center">Select return date: <input type="date" name="date" required>
+                    </h5>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <br>
+
+        <div class="form-row">
+            <h2 class="text-center">Select student: </h2>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" >Student: </label>
+                </div>
+                <select class="custom-select" name="student"  required>
+                    <option th:each="s : ${students}" th:value="@{{id}(id = ${s.getId()})}">
+                        <p th:text="${s.getFirstName()}+' '+${s.getLastName()}"
+                           class="list-group-item"></p>
+                    </option>
+                </select>
+            </div>
+
+            <br>
+            <br>
+
+            <h2 class="text-center">Select librarian: </h2>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" >Librarian: </label>
+                </div>
+                <select class="custom-select" name="librarian" required>
+                    <option th:each="l : ${librarians}" th:value="@{{id}(id = ${l.getId()})}">
+                        <p th:text="${l.getFirstName()}+' '+${l.getLastName()}"
+                           class="list-group-item"></p>
+                    </option>
+                </select>
+            </div>
+
+
+        </div>
+        <div class="form-row mb-3 mt-3 d-flex justify-content-center ">
+        <button type="submit" class="btn btn-success" >Issue book</button>
+        </div>
+    </form>
+
+</div>
+<script>
+
+    function isEmpty(value) {
+        return typeof value == 'string' && !value.trim() || typeof value == 'undefined' || value === null;
+    }
+
+    $("#search-books").submit(function (e){
+        e.preventDefault();
+
+        var val = $("#search-text").val();
+        if (val.length > 2) {
+            $.ajax({
+                type: "GET",
+                url: "/issueBooks/search?value=" + val,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 6000,
+                success: function (data) {
+                    if (data != "") {
+                        $("#books-list").empty();
+                        $("#books-list").append(data);
+                    } else {
+                        $("#books-list").empty();
+                    }
+
+                },
+                error: function (e) {
+
+                    $("#books-list").empty();
+                    console.log("ERROR : ", e);
+
+                }
+            });
+
+        }else {
+            $("#books-list").empty();
+        }
+    });
+
+    $("#issue-book").submit(function (e) {
+
+        e.preventDefault();
+        var form = $(this);
+
+        if (isEmpty( form.serialize())) {
+            return;
+        }
+
+
+        $.ajax({
+            type: "POST",
+            url: "/issueBooks/students",
+            data: form.serialize(),
+            success: function () {
+                alert("Issue book!")
+                window.location.href = "/issueBooks/students";
+            }
+        });
+
+    });
+
+</script>
+
+</body>
+</html>

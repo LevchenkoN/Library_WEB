@@ -1,0 +1,23 @@
+<th:block th:fragment="card" xmlns:th="http://www.w3.org/1999/html">
+    <div class="container">
+        <div class="row row-cols-md-3 ">
+            <div class="card text-center w-25" th:each="book : ${books}">
+                <div class="card-body">
+
+                    <h4 class="card-title" th:text="${book.getName()}"></h4>
+                    <p class="card-text"><b>Category: </b><span th:text="${book.getCategory().getName()}"></span></p>
+                    <p class="card-text"><b>Theme: </b><span th:text="${book.getTheme().getName()}"></span></p>
+                    <p class="card-text"><b>Year: </b><span th:text="${book.getYear()}"></span></p>
+                    <p class="card-text"><b>Press: </b><span th:text="${book.getPress().getName()}"></span></p>
+                    <p class="card-text"><b>Pages: </b><span th:text="${book.getPages()}"></span></p>
+                    <p class="card-text"><b th:text="${book.getAuthorsString()!=''} ? 'Authors: ': ''"></b><span th:text="${book.getAuthorsString()}"></span></p>
+                    <p class="card-text"><b>Quantity: </b><span th:text="${book.getQuantity()}"></span></p>
+                    <p class="card-text"><b>Description: </b><span th:text="${book.getDescription()}"></span></p>
+
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</th:block>

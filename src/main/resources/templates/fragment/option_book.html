@@ -1,0 +1,7 @@
+<option th:each="book : ${books}" th:value="@{{id}(id = ${book.getId()})}">
+  Name: [[${book.getName()}]]
+  Category: [[${book.getCategory().getName()}]]
+  Year: [[${book.getYear()}]]
+  Press: [[${book.getPress().getName()}]]
+  Pages: [[${book.getPages()}]]c.
+</option>

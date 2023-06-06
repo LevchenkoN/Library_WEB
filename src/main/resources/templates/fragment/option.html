@@ -1,0 +1,3 @@
+<option class="list-group-item" th:each="o : ${obj}" th:value="@{{id}(id = ${o.getId()})}">
+     [[${o.getName()}]]
+  </option>
